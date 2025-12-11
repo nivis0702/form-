@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>Document</title>
+</head>
+
+        <body class="h-dvh grid grid-cols-1 lg:grid-cols-2">
+    <section class="border grid place-items-center bg-purple-400">
+      <form class=" w-[500px] p-2 bg-red-300 text-white">
+        <h1 class="text-2xl font-bold text-center text-yellow-300 ">Registration</h1>
+        <table class=" w-full [&_td]:p-2">
+          <tbody>
+            <tr>
+              <td>
+     <p class="font-bold text-blue-500">Full Name</p>
+      <input type="text"name="name"placeholder ="Enter your name"class="w-full h-10 outline px-2 mt-1"/>
+              </td>
+              <td>
+                <p class="font-bold text-blue-500">User Name</p>
+        <input type="text"name="user"placeholder ="Enter your username"class="w-full h-10 outline px-2 mt-1"/>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <p class="font-bold text-blue-500">Email</p>
+        <input type="email"name="email"placeholder ="Enter your email"class="w-full h-10 outline px-2 mt-1"/>
+              </td>
+              <td>
+                <p class="font-bold text-blue-500">Phone number</p>
+        <input type="tel"name="email"placeholder ="Enter your phone number"class="w-full h-10 outline px-2 mt-1"/>
+      
+              </td>
+            </tr>
+            <tr>
+              <td class="" colspan="2">
+                <p class="text-blue-800">Gender</p>
+                <input type="radio" name="gender" value="Male" />
+                <label for=""class="text-red-500">Male</label>
+                <input type="radio" name="gender" value="Female" />
+                <label for=""class="text-red-500">Female</label>
+                <input type="radio" name="gender" value="Prefer not to say" />
+                <label for=""class="text-red-500">Prefer not to say</label>
+                
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+         <input type="submit" value="Submit" class="outline w-full h-10 hover:bg-black 
+         hover:text-white cursor-pointer  "/>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </section>
+    <section class="border bg-yellow-300 text-blue-600 ">
+      <ul class="p-2 flex flex-col gap-6 overflow-y-scroll h-[80vh] "></ul>
+</section>
+<script>
+    const Form=document.querySelector("form")
+    const UL=document.querySelector("ul")
+    let arr=JSON.parse(localStorage.getItem("List"))|| [];
+
+    Form.addEventListener("submit",(e)=>{
+        e.preventDefault();
+
+        const todoForm=new FormData(Form);
+
+        const obj={};
+
+        for(let[key,value]of todoForm.entries()){                                                                                                                                                                       
+            obj[key]=value;
+        }
+            obj.id=arr.length+1;
+            arr.push(obj);
+            // console.info(arr);
+            renderTask(arr);
+            localStorage.setItem("List",JSON.stringify(arr));
+            // Form.reset()
+            
+    });
+    function renderTask(arr){
+        UL.innerHTML=`
+        ${arr.map(
+       (list,idx)=>`
+            <li class="flex items-center gap-5 p-2 shadow-2xl bg-white">
+                <div class="text-red-600">${idx +1}</div>
+                <div class="flex-1 ">${list.name}</div>
+                <div >
+                    <button onclick="handleEdit(${list.id
+                    })"class="outline w-15 text-cyan-400 hover:bg-cyan-400 hover:text-white">Edit</button>
+                    </div>
+                      <div>
+                    <button class="outline w-15 text-rose-400 hover:bg-rose-400 hover:text-white">Delete</button>
+                    </div>
+                    </li>
+            `   
+        ).join("")}
+        `;
+    }
+  renderTask(arr)
+  function handleEdit(id){
+      const listFount=arr.find((list)=>list.id===id);
+      const inputBox=Form.querySelectorAll(`input`);
+      inputBox.forEach((input)=>{
+        const fieldName=input.name;
+        input.value=listFount[fieldName];
+      });
+  }
+  
+</script>
+</body>
+</html>
